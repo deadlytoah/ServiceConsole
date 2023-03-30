@@ -14,8 +14,8 @@ struct ResultView: View {
     @EnvironmentObject var zmqContext: ZMQContext
 
     let request: Request
-    var result: [String]? = nil
-    var error: String? = nil
+    @State var result: [String]? = nil
+    @State var error: String? = nil
 
     var body: some View {
         VStack {
@@ -44,9 +44,16 @@ struct ResultView: View {
     func invokeRemoteFunction() {
         if let zcontext = self.zmqContext.get() {
             do {
-                try invokeRemoteFunctionImpl(zcontext, self.request.socketAddress, self.request.command, self.request.arguments)
-            } catch {}
-        } else {}
+                self.result = try invokeRemoteFunctionImpl(zcontext, self.request.socketAddress, self.request.command, self.request.arguments)
+                self.error = nil
+            } catch {
+                self.result = nil
+                self.error = "Couldn't call the remote function."
+            }
+        } else {
+            self.result = nil
+            self.error = "App failed to initialise.  Please restart."
+        }
     }
 
     private func invokeRemoteFunctionImpl(_ context: SwiftyZeroMQ.Context, _ address: String, _ command: String, _ arguments: [String]) throws -> [String] {

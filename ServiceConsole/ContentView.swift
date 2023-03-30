@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var socketAddress: String = ""
+    @State private var port: String = ""
     @State private var command: String = ""
-    @State private var argumentFields: [String] = [""]
+    @State private var argumentFields: [String] = []
 
     var body: some View {
-        NavigationView {
+        NavigationSplitView {
             VStack {
-                TextField("Socket Address", text: $socketAddress)
+                TextField("Port", text: $port)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
 
                 TextField("Command", text: $command)
@@ -33,7 +33,7 @@ struct ContentView: View {
                             .font(.system(size: 12))
                     }
                     Button(action: {
-                        if self.argumentFields.count > 1 {
+                        if self.argumentFields.count > 0 {
                             self.argumentFields.removeLast()
                         }
                     }) {
@@ -42,14 +42,14 @@ struct ContentView: View {
                     }
                 }
 
-                NavigationLink("Invoke", value: Request(socketAddress: self.socketAddress, command: self.command, arguments: self.argumentFields))
+                NavigationLink("Invoke", value: Request(socketAddress: "127.0.0.1:\(self.port)", command: self.command, arguments: self.argumentFields))
             }
             .padding()
             .navigationTitle("Remote Method")
             .navigationDestination(for: Request.self) { request in
                 ResultView(request: request)
             }
-        }
+        } detail: {}
     }
 }
 
