@@ -6,11 +6,16 @@
 //
 
 import SwiftUI
+import SwiftyZeroMQ
+
+let SOCKET_TIMEOUT: TimeInterval = 200.0
 
 struct ResultView: View {
+    @EnvironmentObject var zmqContext: ZMQContext
+
     let request: Request
-    let result: [String]? = nil
-    let error: String? = nil
+    var result: [String]? = nil
+    var error: String? = nil
 
     var body: some View {
         VStack {
@@ -33,6 +38,53 @@ struct ResultView: View {
         }
         .padding()
         .navigationTitle("Result")
+        .onAppear(perform: self.invokeRemoteFunction)
+    }
+
+    func invokeRemoteFunction() {
+        if let zcontext = self.zmqContext.get() {
+            do {
+                try invokeRemoteFunctionImpl(zcontext, self.request.socketAddress, self.request.command, self.request.arguments)
+            } catch {}
+        } else {}
+    }
+
+    private func invokeRemoteFunctionImpl(_ context: SwiftyZeroMQ.Context, _ address: String, _ command: String, _ arguments: [String]) throws -> [String] {
+        let socket = try context.socket(.request)
+        try socket.connect(address)
+
+        // Send the command to the backend
+        var commands = [command]
+        commands.append(contentsOf: arguments)
+        try socket.sendMultipart(parts: commands.map { $0.data(using: .utf8)! })
+
+        let poller = SwiftyZeroMQ.Poller()
+        try poller.register(socket: socket, flags: .pollIn)
+        let events = try poller.poll(timeout: SOCKET_TIMEOUT)
+        if events[socket]!.contains(.pollIn) {
+            let response = try socket.recvMultipart()
+            let result = String(data: response[0], encoding: .utf8)
+
+            if result == "OK" {
+                return Array(response.dropFirst().map {
+                    if let string = String(data: $0, encoding: .utf8) {
+                        return string
+                    } else {
+                        return "binary data is not encodable in utf-8"
+                    }
+                })
+            } else if result == "ERROR" && response.count > 1 {
+                if let message = String(data: response[1], encoding: .utf8) {
+                    throw SCError.backend(command, message)
+                } else {
+                    throw SCError.backend(command, "error in backend (error message was not in utf8)")
+                }
+            } else {
+                throw SCError.proto(command, "Error in the contract of Result")
+            }
+        } else {
+            throw SCError.timeout(command)
+        }
     }
 }
 
