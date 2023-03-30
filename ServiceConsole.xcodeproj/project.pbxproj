@@ -307,6 +307,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ServiceConsole/Preview Content\"";
 				DEVELOPMENT_TEAM = 68ULM8WQMP;
 				ENABLE_HARDENED_RUNTIME = YES;
+				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = "/Users/hcs/Library/Developer/Xcode/DerivedData/SwiftyZeroMQ-aoyzemwwyhatrkacechrrygxvcuj/Build/Products/Debug";
 				GENERATE_INFOPLIST_FILE = YES;
@@ -346,6 +347,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ServiceConsole/Preview Content\"";
 				DEVELOPMENT_TEAM = 68ULM8WQMP;
 				ENABLE_HARDENED_RUNTIME = YES;
+				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = "/Users/hcs/Library/Developer/Xcode/DerivedData/SwiftyZeroMQ-aoyzemwwyhatrkacechrrygxvcuj/Build/Products/Debug";
 				GENERATE_INFOPLIST_FILE = YES;
