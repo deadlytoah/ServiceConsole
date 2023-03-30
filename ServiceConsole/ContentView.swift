@@ -11,9 +11,6 @@ struct ContentView: View {
     @State private var socketAddress: String = ""
     @State private var command: String = ""
     @State private var argumentFields: [String] = [""]
-    @State private var result: [String]?
-    @State private var error: String?
-    @State private var showingResultView = false
 
     var body: some View {
         NavigationView {
@@ -45,57 +42,14 @@ struct ContentView: View {
                     }
                 }
 
-                NavigationLink("Invoke", value: "result")
+                NavigationLink("Invoke", value: Request(socketAddress: self.socketAddress, command: self.command, argumentFields: self.argumentFields))
             }
             .padding()
             .navigationTitle("Remote Method")
-            .navigationDestination(isPresented: $showingResultView) {
-                ResultView(result: result, error: error)
+            .navigationDestination(for: Request.self) { request in
+                ResultView(request: request)
             }
         }
-    }
-
-    private func invokeRemoteMethod() {
-        // TODO: Implement the remote method call
-
-        // For now, just show a dummy result or error
-        if command == "hello" {
-            result = ["Hello, World!"]
-            error = nil
-        } else {
-            result = nil
-            error = "Unknown command: \(command)"
-        }
-
-        showingResultView = true
-    }
-}
-
-struct ResultView: View {
-    let result: [String]?
-    let error: String?
-
-    var body: some View {
-        VStack {
-            if let result = result {
-                Text("Result:")
-                    .font(.headline)
-                    .padding(.bottom)
-
-                List(result, id: \.self) {
-                    Text($0)
-                }
-            } else if let error = error {
-                Text("Error:")
-                    .font(.headline)
-                    .padding(.bottom)
-
-                Text(error)
-                    .foregroundColor(.red)
-            }
-        }
-        .padding()
-        .navigationTitle("Result")
     }
 }
 
