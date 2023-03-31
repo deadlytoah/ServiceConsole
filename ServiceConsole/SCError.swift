@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftyZeroMQ
 
 enum SCError: Error {
     case backend(String, String)
@@ -13,4 +14,5 @@ enum SCError: Error {
     case proto(String, String)
     case timeout(String)
     case uuid(String)
+    case zmq(String, SwiftyZeroMQ.ZeroMQError)
 }
