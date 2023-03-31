@@ -42,7 +42,7 @@ struct ContentView: View {
                     }
                 }
 
-                NavigationLink("Invoke", value: Request(socketAddress: "127.0.0.1:\(self.port)", command: self.command, arguments: self.argumentFields))
+                NavigationLink("Invoke", value: Request(socketAddress: "tcp://127.0.0.1:\(self.port)", command: self.command, arguments: self.argumentFields))
             }
             .padding()
             .navigationTitle("Remote Method")
