@@ -8,9 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var zmqContext: ZMQContext
+    @State var serviceController: ServiceController? = nil
+
     @State private var port: String = ""
     @State private var command: String = ""
     @State private var argumentFields: [String] = []
+
+    @State var result: ServiceCallResult = .ready
 
     var body: some View {
         NavigationSplitView {
@@ -42,19 +47,25 @@ struct ContentView: View {
                     }
                 }
 
-                NavigationLink("Invoke", value: Request(socketAddress: "tcp://127.0.0.1:\(self.port)", command: self.command, arguments: self.argumentFields))
+                Button("Invoke") {
+                    let request = Request(socketAddress: "tcp://127.0.0.1:\(self.port)", command: self.command, arguments: self.argumentFields)
+                    self.result = self.serviceController!.invokeRemoteFunction(request)
+                }
             }
             .padding()
             .navigationTitle("Remote Method")
-            .navigationDestination(for: Request.self) { request in
-                ResultView(request: request)
-            }
-        } detail: {}
+        } detail: {
+            ResultView(result: self.$result)
+        }
+        .onAppear {
+            self.serviceController = ServiceController(zmqContext: self.zmqContext)
+        }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .environmentObject(ZMQContext())
     }
 }
