@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftyZeroMQ
 
-let SOCKET_TIMEOUT: TimeInterval = 200.0
+let SOCKET_TIMEOUT: TimeInterval = 3000.0
 
 struct ResultView: View {
     @Binding var result: ServiceCallResult
