@@ -22,15 +22,17 @@ struct ResultView: View {
                     .padding(.bottom)
 
             case .ok(let response):
-                Text("Result:")
-                    .font(.headline)
-                    .padding(.bottom)
-                List(response, id: \.self) {
-                    Text($0)
+                Text("Response received at \(DateFormatter.localizedString(from: Date(), dateStyle: .short, timeStyle: .medium))")
+                if response.isEmpty {
+                    Text("There was no message.")
+                } else {
+                    List(response, id: \.self) {
+                        Text($0)
+                    }
                 }
 
             case .error(let error):
-                Text("Error:")
+                Text("Error received at \(DateFormatter.localizedString(from: Date(), dateStyle: .short, timeStyle: .medium))")
                     .font(.headline)
                     .padding(.bottom)
                 Text(error)

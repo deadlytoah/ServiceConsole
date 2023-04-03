@@ -47,10 +47,7 @@ struct ContentView: View {
                     }
                 }
 
-                Button("Invoke") {
-                    let request = Request(socketAddress: "tcp://127.0.0.1:\(self.port)", command: self.command, arguments: self.argumentFields)
-                    self.result = self.serviceController!.invokeRemoteFunction(request)
-                }
+                Button("Invoke", action: invoke)
             }
             .padding()
             .navigationTitle("Remote Method")
@@ -61,11 +58,16 @@ struct ContentView: View {
             self.serviceController = ServiceController(zmqContext: self.zmqContext)
         }
     }
+
+    func invoke() {
+        let request = Request(socketAddress: "tcp://127.0.0.1:\(self.port)", command: self.command, arguments: self.argumentFields)
+        self.result = self.serviceController!.invokeRemoteFunction(request)
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(result: .ok([]))
             .environmentObject(ZMQContext())
     }
 }

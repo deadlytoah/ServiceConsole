@@ -19,8 +19,8 @@ struct ServiceController {
                 return .error("Calling the remote command [\(command)] timed out.")
             } catch SCError.proto(let command, let message) {
                 return .error("Contract violation while running [\(command)]: \(message)")
-            } catch SCError.backend(let command, let message) {
-                return .error("Backend says [\(command)]: \(message)")
+            } catch let error as SCBackendError {
+                return .error("Backend says: \(error.message)")
             } catch SCError.zmq(let command, let error) {
                 return .error("Communications failed [\(command)]: \(error.description)")
             } catch {
@@ -56,11 +56,17 @@ struct ServiceController {
                             return "binary data is not encodable in utf-8"
                         }
                     })
-                } else if result == "ERROR" && response.count > 1 {
-                    if let message = String(data: response[1], encoding: .utf8) {
-                        throw SCError.backend(command, message)
+                } else if result == "ERROR" && response.count > 2 {
+                    if let code = String(data: response[1], encoding: .utf8) {
+                        let message: String
+                        if let m = String(data: response[2], encoding: .utf8) {
+                            message = m
+                        } else {
+                            message = "error in backend (error message was not in utf8)"
+                        }
+                        throw SCBackendError(code: code, message: message)
                     } else {
-                        throw SCError.backend(command, "error in backend (error message was not in utf8)")
+                        throw SCError.proto(command, "error in the contract of Result (error code)")
                     }
                 } else {
                     throw SCError.proto(command, "error in the contract of Result")
