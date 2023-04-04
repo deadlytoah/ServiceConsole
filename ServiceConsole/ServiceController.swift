@@ -14,20 +14,20 @@ struct ServiceController {
     func invokeRemoteFunction(_ request: Request) -> ServiceCallResult {
         if let zcontext = self.zmqContext.get() {
             do {
-                return .ok(try invokeRemoteFunctionImpl(zcontext, request.socketAddress, request.command, request.arguments))
+                return .ok(Date(), try invokeRemoteFunctionImpl(zcontext, request.socketAddress, request.command, request.arguments))
             } catch SCError.timeout(let command) {
-                return .error("Calling the remote command [\(command)] timed out.")
+                return .error(Date(), "Calling the remote command [\(command)] timed out.")
             } catch SCError.proto(let command, let message) {
-                return .error("Contract violation while running [\(command)]: \(message)")
+                return .error(Date(), "Contract violation while running [\(command)]: \(message)")
             } catch let error as SCBackendError {
-                return .error("Backend says: \(error.message)")
+                return .error(Date(), "Backend says: \(error.message)")
             } catch SCError.zmq(let command, let error) {
-                return .error("Communications failed [\(command)]: \(error.description)")
+                return .error(Date(), "Communications failed [\(command)]: \(error.description)")
             } catch {
-                return .error("Couldn't call the remote function.")
+                return .error(Date(), "Couldn't call the remote function.")
             }
         } else {
-            return .error("App failed to initialise.  Please restart.")
+            return .error(Date(), "App failed to initialise.  Please restart.")
         }
     }
 

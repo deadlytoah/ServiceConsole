@@ -7,21 +7,8 @@
 
 import Foundation
 
-enum ServiceCallResult: Equatable {
+enum ServiceCallResult {
     case ready
-    case ok([String])
-    case error(String)
-
-    static func == (lhs: ServiceCallResult, rhs: ServiceCallResult) -> Bool {
-        switch (lhs, rhs) {
-        case (.ready, .ready):
-            return true
-        case let (.ok(lhsData), .ok(rhsData)):
-            return lhsData == rhsData
-        case let (.error(lhsMessage), .error(rhsMessage)):
-            return lhsMessage == rhsMessage
-        default:
-            return false
-        }
-    }
+    case ok(Date, [String])
+    case error(Date, String)
 }

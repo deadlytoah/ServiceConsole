@@ -21,8 +21,8 @@ struct ResultView: View {
                     .font(.headline)
                     .padding(.bottom)
 
-            case .ok(let response):
-                Text("Response received at \(DateFormatter.localizedString(from: Date(), dateStyle: .short, timeStyle: .medium))")
+            case .ok(let date, let response):
+                Text("Response received at \(DateFormatter.localizedString(from: date, dateStyle: .short, timeStyle: .medium))")
                 if response.isEmpty {
                     Text("There was no message.")
                 } else {
@@ -31,8 +31,8 @@ struct ResultView: View {
                     }
                 }
 
-            case .error(let error):
-                Text("Error received at \(DateFormatter.localizedString(from: Date(), dateStyle: .short, timeStyle: .medium))")
+            case .error(let date, let error):
+                Text("Error received at \(DateFormatter.localizedString(from: date, dateStyle: .short, timeStyle: .medium))")
                     .font(.headline)
                     .padding(.bottom)
                 Text(error)
