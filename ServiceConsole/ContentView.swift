@@ -22,9 +22,11 @@ struct ContentView: View {
             VStack {
                 TextField("Port", text: $port)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .onSubmit(invoke)
 
                 TextField("Command", text: $command)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .onSubmit(invoke)
 
                 ForEach(argumentFields.indices, id: \.self) { index in
                     TextField("Argument \(index + 1)", text: self.$argumentFields[index])
