@@ -69,7 +69,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(result: .ok(Date(), []))
+        ContentView(result: .ok(Date(), ["a", "b"]))
             .environmentObject(ZMQContext())
     }
 }

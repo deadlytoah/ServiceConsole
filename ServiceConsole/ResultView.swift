@@ -26,8 +26,13 @@ struct ResultView: View {
                 if response.isEmpty {
                     Text("There was no message.")
                 } else {
-                    List(response, id: \.self) {
-                        Text($0)
+                    List {
+                        ForEach(response.indices, id: \.self) { index in
+                            Text(response[index])
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(index % 2 == 0 ? Color.gray.opacity(0.1) : Color.gray.opacity(0.05))
+                        }
                     }
                 }
 
