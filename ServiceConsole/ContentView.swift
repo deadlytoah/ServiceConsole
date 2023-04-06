@@ -31,6 +31,7 @@ struct ContentView: View {
                 ForEach(argumentFields.indices, id: \.self) { index in
                     TextField("Argument \(index + 1)", text: self.$argumentFields[index])
                         .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .onSubmit(invoke)
                 }
                 HStack {
                     Button(action: {
