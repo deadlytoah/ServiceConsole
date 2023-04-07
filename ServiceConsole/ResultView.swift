@@ -27,6 +27,7 @@ struct ResultView: View {
                     List {
                         ForEach(response.indices, id: \.self) { index in
                             Text(try! AttributedString(markdown: response[index]))
+                                .textSelection(.enabled)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding()
                                 .background(index % 2 == 0 ? Color.gray.opacity(0.1) : Color.gray.opacity(0.05))
@@ -39,6 +40,7 @@ struct ResultView: View {
                     .font(.headline)
                     .padding(.bottom)
                 Text(error)
+                    .textSelection(.enabled)
                     .foregroundColor(.red)
             }
         }
