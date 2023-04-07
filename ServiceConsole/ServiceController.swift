@@ -11,10 +11,33 @@ import SwiftyZeroMQ
 struct ServiceController {
     let zmqContext: ZMQContext
 
-    func invokeRemoteFunction(_ request: Request) -> ServiceCallResult {
+    let DEFAULT_TIMEOUT = 300.0
+
+    func getMetadata(_ request: Request) -> [String:Any]? {
+        let result = self.invokeRemoteFunction(Request(socketAddress: request.socketAddress, command: "metadata", arguments: [request.command]), DEFAULT_TIMEOUT)
+        switch result {
+        case .ok(_, let response):
+            if response.count > 0 {
+                let jsonString = response[0]
+                let jsonData = jsonString.data(using: .utf8)!
+                do {
+                    return try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String:Any]
+                } catch {
+                    return nil
+                }
+            } else {
+                return nil
+            }
+        default:
+            break
+        }
+        return nil
+    }
+
+    func invokeRemoteFunction(_ request: Request, _ timeout: TimeInterval) -> ServiceCallResult {
         if let zcontext = self.zmqContext.get() {
             do {
-                return .ok(Date(), try invokeRemoteFunctionImpl(zcontext, request.socketAddress, request.command, request.arguments))
+                return .ok(Date(), try invokeRemoteFunctionImpl(zcontext, request.socketAddress, request.command, request.arguments, timeout))
             } catch SCError.timeout(let command) {
                 return .error(Date(), "Calling the remote command [\(command)] timed out.")
             } catch SCError.proto(let command, let message) {
@@ -31,7 +54,7 @@ struct ServiceController {
         }
     }
 
-    private func invokeRemoteFunctionImpl(_ context: SwiftyZeroMQ.Context, _ address: String, _ command: String, _ arguments: [String]) throws -> [String] {
+    private func invokeRemoteFunctionImpl(_ context: SwiftyZeroMQ.Context, _ address: String, _ command: String, _ arguments: [String], _ timeout: TimeInterval) throws -> [String] {
         do {
             let socket = try context.socket(.request)
             try socket.connect(address)
@@ -43,7 +66,7 @@ struct ServiceController {
 
             let poller = SwiftyZeroMQ.Poller()
             try poller.register(socket: socket, flags: .pollIn)
-            let events = try poller.poll(timeout: SOCKET_TIMEOUT)
+            let events = try poller.poll(timeout: timeout)
             if events[socket]!.contains(.pollIn) {
                 let response = try socket.recvMultipart()
                 let result = String(data: response[0], encoding: .utf8)

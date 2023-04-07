@@ -64,7 +64,15 @@ struct ContentView: View {
 
     func invoke() {
         let request = Request(socketAddress: "tcp://127.0.0.1:\(self.port)", command: self.command, arguments: self.argumentFields)
-        self.result = self.serviceController!.invokeRemoteFunction(request)
+        if let metadataOfCall = self.serviceController!.getMetadata(request) {
+            if let timeout = metadataOfCall["timeout"] as? TimeInterval {
+                self.result = self.serviceController!.invokeRemoteFunction(request, timeout)
+            } else {
+                self.result = .error(Date(), "Failed to parse the metadata of the service call")
+            }
+        } else {
+            self.result = .error(Date(), "Failed to retrieve the metadata of the service call")
+        }
     }
 }
 
