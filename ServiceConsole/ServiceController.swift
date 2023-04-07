@@ -13,7 +13,7 @@ struct ServiceController {
 
     let DEFAULT_TIMEOUT = 300.0
 
-    func getMetadata(_ request: Request) -> [String:Any]? {
+    func getMetadata(_ request: Request) -> ServiceCallResult<[String: Any]> {
         let result = self.invokeRemoteFunction(Request(socketAddress: request.socketAddress, command: "metadata", arguments: [request.command]), DEFAULT_TIMEOUT)
         switch result {
         case .ok(_, let response):
@@ -21,20 +21,23 @@ struct ServiceController {
                 let jsonString = response[0]
                 let jsonData = jsonString.data(using: .utf8)!
                 do {
-                    return try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String:Any]
+                    let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: [])
+                    if let metadata = jsonObject as? [String:Any] {
+                        return .ok(Date(), metadata)
+                    }
                 } catch {
-                    return nil
+                    return .error(Date(), "error deserialising JSON")
                 }
-            } else {
-                return nil
             }
+            return .error(Date(), "Metadata not available.")
+        case .error(_, let message):
+            return .error(Date(), message)
         default:
-            break
+            return .error(Date(), "Unknown error occurred.")
         }
-        return nil
     }
 
-    func invokeRemoteFunction(_ request: Request, _ timeout: TimeInterval) -> ServiceCallResult {
+    func invokeRemoteFunction(_ request: Request, _ timeout: TimeInterval) -> ServiceCallResult<[String]> {
         if let zcontext = self.zmqContext.get() {
             do {
                 return .ok(Date(), try invokeRemoteFunctionImpl(zcontext, request.socketAddress, request.command, request.arguments, timeout))

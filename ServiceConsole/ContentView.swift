@@ -15,7 +15,7 @@ struct ContentView: View {
     @State private var command: String = ""
     @State private var argumentFields: [String] = []
 
-    @State var result: ServiceCallResult = .ready
+    @State var result: ServiceCallResult<[String]> = .ready
 
     var body: some View {
         NavigationSplitView {
@@ -64,14 +64,19 @@ struct ContentView: View {
 
     func invoke() {
         let request = Request(socketAddress: "tcp://127.0.0.1:\(self.port)", command: self.command, arguments: self.argumentFields)
-        if let metadataOfCall = self.serviceController!.getMetadata(request) {
+        switch self.serviceController!.getMetadata(request) {
+        case .ok(_, let metadataOfCall):
             if let timeout = metadataOfCall["timeout"] as? TimeInterval {
                 self.result = self.serviceController!.invokeRemoteFunction(request, timeout)
             } else {
                 self.result = .error(Date(), "Failed to parse the metadata of the service call")
             }
-        } else {
-            self.result = .error(Date(), "Failed to retrieve the metadata of the service call")
+
+        case .error(_, let message):
+            self.result = .error(Date(), message)
+
+        case .ready:
+            assert(false, "unreachable")
         }
     }
 }

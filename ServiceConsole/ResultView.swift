@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftyZeroMQ
 
 struct ResultView: View {
-    @Binding var result: ServiceCallResult
+    @Binding var result: ServiceCallResult<[String]>
 
     var body: some View {
         VStack {
@@ -26,8 +26,8 @@ struct ResultView: View {
                 } else {
                     List {
                         ForEach(response.indices, id: \.self) { index in
-                            Text(response[index])
-                                .frame(maxWidth: .infinity)
+                            Text(try! AttributedString(markdown: response[index]))
+                                .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding()
                                 .background(index % 2 == 0 ? Color.gray.opacity(0.1) : Color.gray.opacity(0.05))
                         }

@@ -7,8 +7,8 @@
 
 import Foundation
 
-enum ServiceCallResult {
+enum ServiceCallResult<T> {
     case ready
-    case ok(Date, [String])
+    case ok(Date, T)
     case error(Date, String)
 }
