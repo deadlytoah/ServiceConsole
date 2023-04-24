@@ -8,53 +8,45 @@
 import Foundation
 import SwiftyZeroMQ
 
-struct ServiceController {
-    let zmqContext: ZMQContext
+class ServiceController {
+    let zmqContext: SwiftyZeroMQ.Context
+    let endpoint: String
 
-    let DEFAULT_TIMEOUT = 300.0
+    init(zmqContext: SwiftyZeroMQ.Context, endpoint: String) {
+        self.zmqContext = zmqContext
+        self.endpoint = endpoint
+    }
 
-    func getMetadata(_ request: Request) -> ServiceCallResult<[String: Any]> {
-        let result = self.invokeRemoteFunction(Request(socketAddress: request.socketAddress, command: "metadata", arguments: [request.command]), DEFAULT_TIMEOUT)
-        switch result {
-        case .ok(_, let response):
-            if response.count > 0 {
-                let jsonString = response[0]
-                let jsonData = jsonString.data(using: .utf8)!
-                do {
-                    let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: [])
-                    if let metadata = jsonObject as? [String:Any] {
-                        return .ok(Date(), metadata)
-                    }
-                } catch {
-                    return .error(Date(), "error deserialising JSON")
-                }
-            }
-            return .error(Date(), "Metadata not available.")
-        case .error(_, let message):
-            return .error(Date(), message)
-        default:
-            return .error(Date(), "Unknown error occurred.")
+    func getMetadata(call: String, timeout: TimeInterval) throws -> [String: Any] {
+        let response = try self.invokeRemoteFunction(Request(command: "metadata", arguments: [call]), timeout)
+        if response.count > 0 {
+            return try Self.deserialiseMetadata(response[0])
+        } else {
+            throw SCError.proto("metadata", "No metadata returned.")
         }
     }
 
-    func invokeRemoteFunction(_ request: Request, _ timeout: TimeInterval) -> ServiceCallResult<[String]> {
-        if let zcontext = self.zmqContext.get() {
-            do {
-                return .ok(Date(), try invokeRemoteFunctionImpl(zcontext, request.socketAddress, request.command, request.arguments, timeout))
-            } catch SCError.timeout(let command) {
-                return .error(Date(), "Calling the remote command [\(command)] timed out.")
-            } catch SCError.proto(let command, let message) {
-                return .error(Date(), "Contract violation while running [\(command)]: \(message)")
-            } catch let error as SCBackendError {
-                return .error(Date(), "Backend says: \(error.message)")
-            } catch SCError.zmq(let command, let error) {
-                return .error(Date(), "Communications failed [\(command)]: \(error.description)")
-            } catch {
-                return .error(Date(), "Couldn't call the remote function.")
+    func getMetadata(calls: [String], timeout: TimeInterval) throws -> [[String: Any]] {
+        let response = try self.invokeRemoteFunction(Request(command: "metadata", arguments: calls), timeout)
+        return try response.map { try Self.deserialiseMetadata($0) }
+    }
+
+    private static func deserialiseMetadata(_ jsonString: String) throws -> [String: Any] {
+        do {
+            let jsonData = jsonString.data(using: .utf8)!
+            let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: [])
+            if let metadata = jsonObject as? [String:Any] {
+                return metadata
+            } else {
+                throw SCError.proto("metadata", "Metadata is not a dictionary.")
             }
-        } else {
-            return .error(Date(), "App failed to initialise.  Please restart.")
+        } catch {
+            throw SCError.proto("metadata", "Metadata is not valid JSON.")
         }
+    }
+
+    func invokeRemoteFunction(_ request: Request, _ timeout: TimeInterval) throws -> [String] {
+        return try self.invokeRemoteFunctionImpl(self.zmqContext, self.endpoint, request.command, request.arguments, timeout)
     }
 
     private func invokeRemoteFunctionImpl(_ context: SwiftyZeroMQ.Context, _ address: String, _ command: String, _ arguments: [String], _ timeout: TimeInterval) throws -> [String] {

@@ -8,19 +8,16 @@
 import Foundation
 
 struct Request: Hashable {
-    var socketAddress: String
     var command: String
     var arguments: [String]
 
     func hash(into hasher: inout Hasher) {
-        hasher.combine(socketAddress)
         hasher.combine(command)
         hasher.combine(arguments)
     }
 
     static func == (lhs: Request, rhs: Request) -> Bool {
-        return lhs.socketAddress == rhs.socketAddress &&
-               lhs.command == rhs.command &&
+        return lhs.command == rhs.command &&
                lhs.arguments == rhs.arguments
     }
 }

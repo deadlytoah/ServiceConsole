@@ -27,11 +27,13 @@ class ZMQContext: ObservableObject {
 @main
 struct ServiceConsoleApp: App {
     let zmqContext = ZMQContext()
+    let serviceStore = ServiceStore()
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(zmqContext)
+                .environmentObject(serviceStore)
         }
     }
 }
