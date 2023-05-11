@@ -13,17 +13,18 @@
 		0F012ABE29D468840046B93C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0F012ABD29D468840046B93C /* Preview Assets.xcassets */; };
 		0F012AC529D549150046B93C /* ServiceCallResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F012AC429D549150046B93C /* ServiceCallResultView.swift */; };
 		0F012AC729D549A50046B93C /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F012AC629D549A50046B93C /* Request.swift */; };
-		0F012ACD29D54AAA0046B93C /* SwiftyZeroMQ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F012ACC29D54AAA0046B93C /* SwiftyZeroMQ.framework */; };
-		0F012ACE29D54AAA0046B93C /* SwiftyZeroMQ.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0F012ACC29D54AAA0046B93C /* SwiftyZeroMQ.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0F012AD129D573F50046B93C /* SCError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F012AD029D573F50046B93C /* SCError.swift */; };
 		0F012AD329D6E4820046B93C /* ServiceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F012AD229D6E4820046B93C /* ServiceController.swift */; };
 		0F249B7429E4DB99007F173C /* ServiceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F249B7329E4DB99007F173C /* ServiceDetailView.swift */; };
 		0F249B7629E4E112007F173C /* ServiceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F249B7529E4E112007F173C /* ServiceStore.swift */; };
 		0F249B7A29E5170E007F173C /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F249B7929E5170E007F173C /* Service.swift */; };
 		0F249B7C29E558D8007F173C /* AddServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F249B7B29E558D8007F173C /* AddServiceView.swift */; };
+		0F4B79CE2A0C836B002E8C8D /* SwiftyZeroMQ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F012ACC29D54AAA0046B93C /* SwiftyZeroMQ.framework */; };
+		0F4B79CF2A0C836B002E8C8D /* SwiftyZeroMQ.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0F012ACC29D54AAA0046B93C /* SwiftyZeroMQ.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0F51F3F729EA55F5003C3BB3 /* ProxyOfService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F51F3F629EA55F5003C3BB3 /* ProxyOfService.swift */; };
 		0F7200EA29ECDD6E001D5FE5 /* ServiceCallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F7200E929ECDD6E001D5FE5 /* ServiceCallView.swift */; };
 		0F7200EC29ECDE53001D5FE5 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F7200EB29ECDE53001D5FE5 /* Command.swift */; };
+		0F7499E82A0C797100C7AED5 /* SwiftyZeroMQ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F7499E72A0C797100C7AED5 /* SwiftyZeroMQ.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,7 +34,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				0F012ACE29D54AAA0046B93C /* SwiftyZeroMQ.framework in Embed Frameworks */,
+				0F4B79CF2A0C836B002E8C8D /* SwiftyZeroMQ.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -49,7 +50,7 @@
 		0F012ABD29D468840046B93C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		0F012AC429D549150046B93C /* ServiceCallResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceCallResultView.swift; sourceTree = "<group>"; };
 		0F012AC629D549A50046B93C /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
-		0F012ACC29D54AAA0046B93C /* SwiftyZeroMQ.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyZeroMQ.framework; path = "../../../Library/Developer/Xcode/DerivedData/SwiftyZeroMQ-aoyzemwwyhatrkacechrrygxvcuj/Build/Products/Debug/SwiftyZeroMQ.framework"; sourceTree = "<group>"; };
+		0F012ACC29D54AAA0046B93C /* SwiftyZeroMQ.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyZeroMQ.framework; path = Frameworks/SwiftyZeroMQ.framework; sourceTree = "<group>"; };
 		0F012AD029D573F50046B93C /* SCError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCError.swift; sourceTree = "<group>"; };
 		0F012AD229D6E4820046B93C /* ServiceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceController.swift; sourceTree = "<group>"; };
 		0F249B7329E4DB99007F173C /* ServiceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ServiceDetailView.swift; path = ServiceConsole/Views/ServiceDetailView.swift; sourceTree = SOURCE_ROOT; };
@@ -59,6 +60,7 @@
 		0F51F3F629EA55F5003C3BB3 /* ProxyOfService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyOfService.swift; sourceTree = "<group>"; };
 		0F7200E929ECDD6E001D5FE5 /* ServiceCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ServiceCallView.swift; path = ServiceConsole/Views/ServiceCallView.swift; sourceTree = SOURCE_ROOT; };
 		0F7200EB29ECDE53001D5FE5 /* Command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
+		0F7499E72A0C797100C7AED5 /* SwiftyZeroMQ.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyZeroMQ.framework; path = Frameworks/SwiftyZeroMQ.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,7 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0F012ACD29D54AAA0046B93C /* SwiftyZeroMQ.framework in Frameworks */,
+				0F4B79CE2A0C836B002E8C8D /* SwiftyZeroMQ.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -116,7 +118,7 @@
 		0F012AC829D549E20046B93C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				0F012ACC29D54AAA0046B93C /* SwiftyZeroMQ.framework */,
+				0F7499E72A0C797100C7AED5 /* SwiftyZeroMQ.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -368,7 +370,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
-				FRAMEWORK_SEARCH_PATHS = "/Users/hcs/Library/Developer/Xcode/DerivedData/SwiftyZeroMQ-aoyzemwwyhatrkacechrrygxvcuj/Build/Products/Debug";
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Frameworks";
 				GENERATE_INFOPLIST_FILE = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -409,7 +411,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
-				FRAMEWORK_SEARCH_PATHS = "/Users/hcs/Library/Developer/Xcode/DerivedData/SwiftyZeroMQ-aoyzemwwyhatrkacechrrygxvcuj/Build/Products/Debug";
+				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Frameworks";
 				GENERATE_INFOPLIST_FILE = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
